@@ -14,12 +14,12 @@ postData('/yuricafe/services/service-main.php',{req:'coffee_menu'} ).then((respo
             '                        <div class="card-body p-4">\n' +
             '                            <div class="text-center" >\n' +
             '                                <!-- Product name-->\n' +
-            '                                <h5 class="fw-bolder" >'+res['name']+'</script></h5>'+res['price'] +'\n' +
+            '                                <h5 class="fw-bolder" >'+res['name']+'</script></h5>Price:$'+res['price'] +'\n' +
             '                            </div>\n' +
             '                        </div>\n' +
             '                        <!-- Product actions-->\n' +
             '                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">\n' +
-            '                            <div class="text-center"><button onclick="addItemToCart('+res['id']+')" class="btn btn-outline-dark mt-auto" href="#">View options</bi></div>\n' +
+            '                            <div class="text-center"><button onclick="addItemToCart('+res['id']+')" class="btn btn-outline-dark mt-auto" href="#">Add into Cart</bi></div>\n' +
             '                        </div>\n' +
             '                    </div>\n' +
             '                </div>';
@@ -43,22 +43,11 @@ async function postData(url, data) {
     return response.json();
 }
 
-function addItemToCart(productID) {
+function addItemToCart(productID,Price) {
     console.log('clicked');
-    let order = {req:'order',item_id:productID,quantity:1,price:10};
-    postData('/services/service-main.php', order).then((response)=>{
+    let order = {req:'order',item_id:productID,price:Price};
+    postData('/yuricafe/services/service-main.php', order).then((response)=>{
         console.log(response);
     });
 }
 
-// async function postData(url,data) {
-//     const response = await fetch(url, {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json'
-//         },
-//         body: JSON.stringify(data)
-//     });
-//     return response.json();
-//
-// }

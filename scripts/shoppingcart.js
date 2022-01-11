@@ -1,20 +1,26 @@
-// Example starter JavaScript for disabling form submissions if there are invalid fields
+const checkouttable = document.getElementById('checkout-table');
 
-(function () {
-  'use strict'
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
-  var forms = document.querySelectorAll('.needs-validation')
+postData('/yuricafe/services/service-main.php',{req:'checkout'} ).then((response)=>{
+  response.forEach((res)=>{
+    console.log(res['order_id'] + ' '+ res['price']+' '+ res['quantity']);
+  });
+  updateMenuUI(contents);
+});
 
-  // Loop over them and prevent submission
-  Array.prototype.slice.call(forms)
-    .forEach(function (form) {
-      form.addEventListener('submit', function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault()
-          event.stopPropagation()
-        }
+function updateMenuUI(contents) {
+  checkouttable.innerHTML = contents;
+}
 
-        form.classList.add('was-validated')
-      }, false)
-    })
-})()
+async function postData(url, data) {
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+  return response.json();
+}
+
+
+
