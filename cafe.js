@@ -2,17 +2,34 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const ejs = require("ejs");
+const app = express();
 const mongoose = require("mongoose");
 const _ = require("lodash");
-
-const app = express();
 
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/shopDB", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/blogDB", {useNewUrlParser: true});
+
+const postSchema = {
+    title: String,
+    content: String
+};
+
+const Post = mongoose.model("Post", postSchema);
+
+app.get("/", function(req, res){
+
+    Post.find({}, function(err, posts){
+        res.render("home", {
+            posts: posts
+        });
+    });
+});
+
 
 const itemsSchema = {
     name: String
@@ -22,7 +39,7 @@ const Item = mongoose.model("Item", itemsSchema);
 
 
 const item1 = new Item({
-    name: "Welcome to your shopping cart!"
+    name: "Welcome to your todolist!"
 });
 
 const item2 = new Item({
@@ -42,8 +59,38 @@ const listSchema = {
 
 const List = mongoose.model("List", listSchema);
 
+app.get("/compose", function(req, res){
+    res.render("compose");
+});
 
-app.get("/", function(req, res) {
+app.post("/compose", function(req, res){
+    const post = new Post({
+        title: req.body.postTitle,
+        content: req.body.postBody
+    });
+
+
+    post.save(function(err){
+        if (!err){
+            res.redirect("/");
+        }
+    });
+});
+
+app.get("/posts/:postId", function(req, res){
+
+    const requestedPostId = req.params.postId;
+
+    Post.findOne({_id: requestedPostId}, function(err, post){
+        res.render("post", {
+            title: post.title,
+            content: post.content
+        });
+    });
+
+});
+
+app.get("/shopping-cart", function(req, res) {
     Item.find({}, function(err, foundItems){
 
         if (foundItems.length === 0) {
@@ -59,11 +106,11 @@ app.get("/", function(req, res) {
             res.render("list", {listTitle: "Today", newListItems: foundItems});
         }
     });
-
 });
 
 app.get("/:customListName", function(req, res){
     const customListName = _.capitalize(req.params.customListName);
+
     List.findOne({name: customListName}, function(err, foundList){
         if (!err){
             if (!foundList){
@@ -86,7 +133,6 @@ app.get("/:customListName", function(req, res){
 app.post("/", function(req, res){
     const itemName = req.body.newItem;
     const listName = req.body.list;
-
     const item = new Item({
         name: itemName
     });
@@ -122,6 +168,10 @@ app.post("/delete", function(req, res){
         });
     }
 });
+
+// app.get("/shopping-cart", function(req, res){
+//     res.render("shopping-cart");
+// });
 
 app.get("/shop", function(req, res){
     res.render("shop");
