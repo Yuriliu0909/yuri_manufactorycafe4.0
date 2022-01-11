@@ -18,8 +18,8 @@ app.get("/location", function(req, res){
     res.render("location");
 });
 
-app.get("/shopping-cart", function(req, res){
-    res.render("shopping-cart");
+app.get("/comment", function(req, res){
+    res.render("comment");
 });
 
 const postSchema = {
