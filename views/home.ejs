@@ -1,24 +1,77 @@
-
-<%- include("partials/header"); -%>
-
-<div class="carousel-item active">
-        <div class="carousel-caption text-start" >
-            <img src="shop.jpg" style="width:128px;height:128px;">
-            <h1>YURI Manufactory&Cafe.</h1>
-            <p>pick awesome goods for sweet life.</p>
-            <p><a class="btn btn-lg btn-primary" href="views/shop.ejs" id="store-btn">Store</a></p>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>YURI Manufactory&Cafe</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/css/styles.css">
+    <nav class="navbar navbar-default" style="height: 100px;">
+        <div class="container">
+            <div class="navbar-header">
+                <p class="navbar-brand">YURI Manufactory&Cafe</p>
+            </div>
+            <ul class="nav navbar-nav navbar-right" style="height: 80px;">
+                <li id="home"><a href="/">HOME</a></li>
+                <li id="location"><a href="/location">LOCATION</a></li>
+                <li id="shop"><a href="/shop">SHOP</a></li>
+                <li id="comment"><a href="/comment">COMMENT</a></li>
+            </ul>
         </div>
-</div>
+    </nav>
+</head>
+    <div>
+        <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" >
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner"  >
+                <div class="carousel-item active">
+                    <svg class="bd-placeholder-img" width="100%" height="100%"  aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="lightgrey"/><image href="shop.jpg" height="105%" width="50%"/></svg>
+                    <div class="container" >
+                        <div class="carousel-caption text-start" >
+                            <h1>Pick Me.</h1>
+                            <p>pick awesome goods for lovely day.</p>
+                            <p><a class="btn btn-lg btn-primary" href="menu.php" id="store-btn">Store</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <svg class="bd-placeholder-img" width="100%" height="100%" aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="lightgrey"/><image href="buttom.jpg" height="100%" width="100%"/></svg>
+                    <div class="container">
+                        <div class="carousel-caption">
+                            <h1>Find Me.</h1>
+                            <p>a heart warm place always open to you.</p>
+                            <p><a class="btn btn-lg btn-primary" href="location.php" id="location-btn">Location</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <svg class="bd-placeholder-img" width="100%" height="100%"  aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false"><rect width="100%" height="100%" fill="lightgrey"/><image href="night.jpg" height="100%" width="150%"/></svg>
+                    <div class="container">
+                        <div class="carousel-caption text-end">
+                            <h1>Shopping Cart.</h1>
+                            <p>check what you've got and think more.</p>
+                            <p><a class="btn btn-lg btn-primary" href="shoppingcart.php" id="shopping-btn">go shopping</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        <script src="/js/bootstrap.bundle.min.js"></script>
+    </div>
 
-<%  posts.forEach(function(post){ %>
-
-    <h1><%=post.title%></h1>
-    <p>
-    <%=post.content.substring(0, 100) + " ..."%>
-    <a href="/posts/<%=post._id%>">Read More</a>
-    </p>
-
-<!--    <% }) %>-->
 
 
 <%- include("partials/footer"); -%>
