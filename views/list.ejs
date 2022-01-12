@@ -11,13 +11,19 @@
         <input type="checkbox" name="checkbox" value="<%=item._id%>" onChange="this.form.submit()">
         <p>coffee type:<%=item.name%></p>
         <p>coffee price:<%=item.price%></p>
+        <p>coffee quantity:<%=item.quantity%></p>
       </div>
       <input type="hidden" name="listName" value="<%= listTitle %>"></input>
     </form>
   <%  }) %>
 
-      <form class="item" action="/" method="post">
+      <form class="item" action="/insert" method="post" style="display: inline-block">
+        <p>add name of coffee</p>
         <input type="text" name="newItem" placeholder="New Item" autocomplete="off">
+        <p>add price of coffee</p>
+        <input type="double" name="newItemPrice" placeholder="New Item" autocomplete="off">
+        <p>add quantity of coffee</p>
+        <input type="number" name="newItemQuantity" placeholder="New Item" autocomplete="off">
         <button type="submit" name="list" value="<%= listTitle %>">+</button>
       </form>
   </div>

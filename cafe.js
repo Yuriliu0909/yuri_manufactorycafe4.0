@@ -71,17 +71,14 @@ app.get('/shop', async (req, res) => {
 })
 
 //add new items into db
-app.post("/", async function(req, res){
-    const itemName = req.body.newItem;
+app.post('/insert', async (req, res) => {
+    // bcrypt.hashSync(req.body.password, 8)
+    const item = new CoffeeModel({name: req.body.newItem, price: req.body.newItemPrice, quantity: req.body.newItemQuantity});
     const listName = req.body.list;
-    const item = new CoffeeModel({
-        name: itemName
-    });
-
-    if (listName === "Yummy Coffees"){
+    if (listName === "Yummy Coffees") {
         await item.save();
         res.redirect("/shop");
-    } else {
+    }else {
         List.findOne({name: listName}, function(err, foundList){
             foundList.items.push(item);
             foundList.save();
@@ -90,21 +87,20 @@ app.post("/", async function(req, res){
     }
 });
 
-app.post("/delete", async function(req, res){
+
+app.post('/delete', async (req, res) => {
+    // bcrypt.hashSync(req.body.password, 8)
     const checkedItemId = req.body.checkbox;
     const listName = req.body.listName;
-    const item = new CoffeeModel({
-        name: itemName
-    });
 
     if (listName === "Yummy Coffees") {
-        await item.findByIdAndRemove(checkedItemId, function(err){
+        await CoffeeModel.findByIdAndRemove(checkedItemId, function(err){
             if (!err) {
                 console.log("Successfully deleted checked item.");
-                res.redirect("/");
+                res.redirect("/shop");
             }
         });
-    } else {
+    }else {
         List.findOneAndUpdate({name: listName}, {$pull: {items: {_id: checkedItemId}}}, function(err, foundList){
             if (!err){
                 res.redirect("/" + listName);
