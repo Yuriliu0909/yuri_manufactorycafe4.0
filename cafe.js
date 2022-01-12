@@ -12,7 +12,40 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-mongoose.connect("mongodb://localhost:27017/coffeeDB", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://admin_yuri:123@cluster0.peek7.mongodb.net/coffeeDB?retryWrites=true&w=majority", {useNewUrlParser: true});
+
+const CoffeeSchema = new mongoose.Schema(
+    {
+        name: {
+            type:String,
+            required: false
+        },
+        price: {
+            type:Number,
+            required: false
+        },
+        quantity: {
+            type:Number,
+            required: false
+        },
+    }
+)
+
+const CoffeeModel = mongoose.model('coffees', CoffeeSchema);
+
+
+app.get('/shop', async (req, res) => {
+    await CoffeeModel.find({}, (err, result) => {
+        if(err) {
+            res.send(err);
+        } else {
+            res.render("list", {listTitle: "Today", newListItems: result});
+            // res.send(result);
+        }
+    });
+})
+
+
 
 app.get("/location", function(req, res){
     res.render("location");
@@ -84,24 +117,24 @@ const coffeeSchema = new mongoose.Schema({
 
 const Coffee = mongoose.model("Coffee",coffeeSchema);
 
-const flatwhite = new Coffee({
-    name:"flat white",
-    price:5.5,
-    quantity:30
-});
-
-const espresso = new Coffee({
-    name:"espresso",
-    price:4,
-    quantity:100
-});
-
-const longblack = new Coffee({
-    name:"long black",
-    price:4.5,
-    quantity:50
-});
-
+// const flatwhite = new Coffee({
+//     name:"flat white",
+//     price:5.5,
+//     quantity:30
+// });
+//
+// const espresso = new Coffee({
+//     name:"espresso",
+//     price:4,
+//     quantity:100
+// });
+//
+// const longblack = new Coffee({
+//     name:"long black",
+//     price:4.5,
+//     quantity:50
+// });
+//
 const listSchema = {
     name: String,
     items: [coffeeSchema]
@@ -109,55 +142,55 @@ const listSchema = {
 
 const List = mongoose.model("List", listSchema);
 
-app.get("/shop", function(req, res) {
-    Coffee.find({}, function(err, foundItems){
-        if (foundItems.length === 0) {
-            Coffee.insertMany([flatwhite,espresso,longblack],function(err){
-                if(err){
-                    console.log(err);
-                }else{
-                    console.log("Successfully saved all the coffees to coffeeDB");
-                }
-            });
-            res.redirect("/");
-        } else {
-            res.render("list", {listTitle: "Today", newListItems: foundItems});
-        }
-    });
-});
+// app.get("/shop", function(req, res) {
+    // CoffeeModel.find({}, function(err, foundItems){
+    //     if (foundItems.length === 0) {
+    //         Coffee.insertMany([flatwhite,espresso,longblack],function(err){
+    //             if(err){
+    //                 console.log(err);
+    //             }else{
+    //                 console.log("Successfully saved all the coffees to coffeeDB");
+    //             }
+    //         });
+    //         res.redirect("/");
+    //     } else {
+    //         res.render("list", {listTitle: "Today", newListItems: foundItems});
+    //     }
+    // });
+// });
 
-app.get("/:customListName", function(req, res){
-    const customListName = _.capitalize(req.params.customListName);
-    List.findOne({name: customListName}, function(err, foundList){
-        if (!err){
-            if (!foundList){
-                //Create a new list
-                const list = new List({
-                    name: customListName,
-                    items: [flatwhite,espresso,longblack]
-                });
-                list.save();
-                res.redirect("/" + customListName);
-            } else {
-                //Show an existing list
+// app.get("/:customListName", function(req, res){
+//     const customListName = _.capitalize(req.params.customListName);
+//     List.findOne({name: customListName}, function(err, foundList){
+//         if (!err){
+//             if (!foundList){
+//                 //Create a new list
+//                 const list = new List({
+//                     name: customListName,
+//                     items: [flatwhite,espresso,longblack]
+//                 });
+//                 list.save();
+//                 res.redirect("/" + customListName);
+//             } else {
+//                 //Show an existing list
+//
+//                 res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
+//             }
+//         }
+//     });
+// });
 
-                res.render("list", {listTitle: foundList.name, newListItems: foundList.items});
-            }
-        }
-    });
-});
-
-app.post("/", function(req, res){
+app.post("/", async function(req, res){
     const itemName = req.body.newItem;
     const listName = req.body.list;
 
-    const item = new Coffee({
+    const item = new CoffeeModel({
         name: itemName
     });
 
     if (listName === "Today"){
-        item.save();
-        res.redirect("/");
+        await item.save();
+        res.redirect("/shop");
     } else {
         List.findOne({name: listName}, function(err, foundList){
             foundList.items.push(item);
