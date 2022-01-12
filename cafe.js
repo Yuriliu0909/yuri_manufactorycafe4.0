@@ -10,6 +10,7 @@ const _ = require("lodash");
 app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({extended: true}));
+
 app.use(express.static("public"));
 
 mongoose.connect("mongodb+srv://admin_yuri:123@cluster0.peek7.mongodb.net/coffeeDB?retryWrites=true&w=majority", {useNewUrlParser: true});
@@ -120,7 +121,6 @@ app.get("/comment", function(req, res){
     res.render("comment");
 });
 
-
 const postSchema = {
     title: String,
     content: String
@@ -129,17 +129,17 @@ const postSchema = {
 const Post = mongoose.model("Post", postSchema);
 
 app.get("/", function(req, res){
-
-    Post.find({}, function(err, posts){
-        res.render("home", {
-            posts: posts
-        });
-    });
+    res.render("home");
 });
 
 
-app.get("/comment", function(req, res){
-    res.render("comment");
+app.get("/community", function(req, res){
+
+    Post.find({}, function(err, posts){
+        res.render("community", {
+            posts: posts
+        });
+    });
 });
 
 app.post("/comment", function(req, res){
@@ -150,7 +150,7 @@ app.post("/comment", function(req, res){
 
     post.save(function(err){
         if (!err){
-            res.redirect("/");
+            res.redirect("/community");
         }
     });
 });
