@@ -20,11 +20,11 @@ app.use(express.static("public"));
 mongoose.connect("mongodb+srv://admin_yuri:123@cluster0.peek7.mongodb.net/coffeeDB?retryWrites=true&w=majority", {useNewUrlParser: true});
 
 //blow is tap pages
-app.get("/", function(req, res){
+app.get("/", function (req, res){
     res.render("home");
 });
 
-app.get("/location", function(req, res){
+app.get("/location", function (req, res){
     res.render("location");
 });
 
@@ -52,12 +52,6 @@ const CoffeeSchema = new mongoose.Schema(
 
 const CoffeeModel = mongoose.model('coffees', CoffeeSchema);
 
-const listSchema = {
-    name: String,
-    items: [CoffeeSchema]
-};
-
-const List = mongoose.model("List", CoffeeSchema);
 
 //show default stuff in coffeeDB at shop page
 app.get('/shop', async (req, res) => {
@@ -110,8 +104,6 @@ app.post('/delete', async (req, res) => {
 });
 
 
-
-
 //below is post methods
 const postSchema = {
     title: String,
@@ -152,7 +144,27 @@ app.get("/posts/:postId", function(req, res){
     });
 });
 
-//below is apache server
+app.get('/get-coffees', async (req, res) => {
+    await CoffeeModel.find({}, (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+app.get('/get-coffee', async (req, res) => {
+    await CoffeeModel.find({_id:req.query.id}, (err, result) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(result);
+        }
+    });
+});
+
+//below is local server
 app.listen(8080, function() {
     console.log("Server started on port 8080");
 });

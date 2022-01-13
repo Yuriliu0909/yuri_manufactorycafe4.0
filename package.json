@@ -1,10 +1,10 @@
 {
-  "name": "ejs-challenge",
+  "name": "yuricafe&manufactory",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "cafe.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +13,10 @@
     "ejs": "^2.6.1",
     "express": "^4.16.3",
     "lodash": "^4.17.11",
-    "mongoose": "^5.13.14"
+    "mongoose": "^5.13.14",
+    "supertest": "^6.2.1"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
   }
 }
